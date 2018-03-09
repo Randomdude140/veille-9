@@ -1,4 +1,3 @@
-/*Configuration d'express*/
 const express = require('express');
 const cookieParser = require('cookie-parser');
 var app = express();
@@ -6,18 +5,14 @@ app.use(cookieParser());
 
 app.use(express.static('public'));
 
-/*Configuration de body parser*/
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: true}));
 
-/* on associe le moteur de vue au module «ejs» */
-app.set('view engine', 'ejs'); // générateur de template
+app.set('view engine', 'ejs');
 const MongoClient = require('mongodb').MongoClient;
 
-/*Permet d'accéder à l’index  automatique  « _id »*/
 const ObjectID = require('mongodb').ObjectID;
 
-/*on associe le moteur de vue au module «ejs»*/
 const util = require("util");
 
 app.use(express.static('public'));
@@ -29,16 +24,9 @@ i18n.configure({
 
 app.use(i18n.init);
 
-let db // variable qui contiendra le lien sur la BD
+let db
 
-/*Permet d'accéder à la boucle de peuplement*/
 const peupler = require("./mes_modules/peupler/index.js");
-
-////////////////////////////////// route accueil
-/*app.get('/', function (req, res) {
-	// affiche le contenu du gabarit accueil
-	res.render('accueil.ejs');
-})*/
 
 app.get('/:lang(en|fr)', function (req, res) {
 	console.log("req.params.local = " + req.params.lang)
@@ -54,24 +42,19 @@ app.get('/', function (req, res) {
 	res.render('accueil.ejs')
 });
 
-////////////////////////////////// route adresses
 app.get('/adresse', function (req, res) {
 	var cursor = db.collection('adresse').find().toArray(function(err, resultat){
 		if (err) return console.log(err)
 		var util = require("util");
  		console.log('util = ' + util.inspect(resultat));
-		// affiche le contenu de la BD
 		res.render('composants/adresses.ejs', {adresses: resultat})
 	}) 
 })
 
-////////////////////////////////// route formulaire
 app.get('/formulaire', function (req, res) {
-	// affiche le contenu du gabarit accueil
 	res.render('gabarit-formulaire.ejs');
 })
 
-//////////////////////////////// route ajouter et modifier
 app.post('/ajouter', (req, res) => {
 	console.log(req.body._id)
 	if(req.body._id ==""){
@@ -105,7 +88,6 @@ app.post('/ajouter', (req, res) => {
 	
 })
 
-//////////////////////////////// route supprimer
 app.get('/delete/:id', (req, res) => {
 	var id = req.params.id 
 	var critere = ObjectID(req.params.id)
@@ -118,7 +100,6 @@ app.get('/delete/:id', (req, res) => {
 	})
 })
 
-//////////////////////////////// route trier
 app.get('/trier/:cle/:ordre', (req, res) => {
 	let cle = req.params.cle
 	let ordre = (req.params.ordre == 'asc' ? 1 : -1)
@@ -128,7 +109,6 @@ app.get('/trier/:cle/:ordre', (req, res) => {
 	})
 })
 
-//////////////////////////////// route peupler
 app.get('/peupler', (req,res) => {
 	res.resultat = peupler(); 
 	console.log('début boucle') 
@@ -142,17 +122,14 @@ app.get('/peupler', (req,res) => {
 	res.redirect('/adresse')
 })
 
-//////////////////////////////// route vider
 app.get('/vider', (req, res) => {
 	db.collection('adresse').drop();
  	res.redirect('/adresse');
 })
 
-/*Connexion à la base de données MongoDB*/
 MongoClient.connect('mongodb://127.0.0.1:27017', (err, database) => {
 	if (err) return console.log(err)
 	db = database.db('carnet_adresse')
-	// lancement du serveur Express sur le port 8081
 	app.listen(8081, () => {
 		console.log('connexion à la BD et on écoute sur le port 8081')
 	})

@@ -11,5 +11,8 @@
     "url": "https://www.github.com/Randomdude140/veille-8.git"
   },
   "author": "Arnaud Voyer",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }
