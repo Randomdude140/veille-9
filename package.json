@@ -1,0 +1,15 @@
+{
+  "name": "veille-8",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/Randomdude140/veille-8.git"
+  },
+  "author": "Arnaud Voyer",
+  "license": "ISC"
+}
